@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foodiefind/pages/home_screen.dart';
+import 'package:flutter_foodiefind/widgets/app_bottom_navbar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const HomeScreen(),
+      //Supaya ukuran font tetap konsisten meskipun settingan ukuran font sistem berbeda
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(1.0)),
+          child: child!,
+        );
+      },
+      home: AppBottomNavbar(),
     );
   }
 }
