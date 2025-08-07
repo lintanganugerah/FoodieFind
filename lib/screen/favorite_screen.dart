@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foodiefind/widgets/bold_text.dart';
+import 'package:flutter_foodiefind/widgets/recipe_card.dart';
 import 'package:shimmer/shimmer.dart';
 
 class FavoriteScreen extends StatefulWidget {
@@ -35,68 +36,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             ),
             itemBuilder: (context, index) {
               final item = _listItems[index];
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            'https://placehold.co/1920x1080/png',
-                            fit: BoxFit.cover,
-                            width: double.maxFinite,
-                            height: double.infinity,
-                            loadingBuilder:
-                                (
-                                  BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent? loadingProgress,
-                                ) {
-                                  if (loadingProgress == null) {
-                                    // Jika loading selesai, tampilkan gambar aslinya.
-                                    return child;
-                                  }
-                                  return Shimmer.fromColors(
-                                    baseColor: Colors.grey[300]!,
-                                    highlightColor: Colors.grey[100]!,
-                                    child: Container(color: Colors.white),
-                                  );
-                                },
-                            errorBuilder:
-                                (
-                                  BuildContext context,
-                                  Object error,
-                                  StackTrace? stackTrace,
-                                ) {
-                                  return const Center(
-                                    child: Icon(
-                                      Icons.broken_image,
-                                      size: 48,
-                                      color: Colors.grey,
-                                    ),
-                                  );
-                                },
-                          ),
-                        ),
-                        Positioned(
-                          top: 1,
-                          child: IconButton(
-                            icon: Icon(Icons.favorite, color: Colors.green),
-                            onPressed: () {
-                              // TODO: Ubah ini menjadi fungsionalitas hapus/favoritkan recipe
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  BoldText(text: "Title $item", size: 16, color: Colors.green),
-                  const Text("Subtitle"),
-                ],
+              return RecipeCard(
+                title: "Title $item",
+                subtitle: "Subtitle",
+                imageNetworkUrl: "https://placehold.co/1920x1080/png",
               );
             },
           ),
