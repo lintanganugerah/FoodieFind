@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foodiefind/screen/favorite_screen.dart';
 import 'package:flutter_foodiefind/screen/home_screen.dart';
-import 'package:flutter_foodiefind/screen/search_screen.dart';
+import 'package:flutter_foodiefind/screen/explore_screen.dart';
 
 class AppBottomNavbar extends StatefulWidget {
   const AppBottomNavbar({super.key});
@@ -13,9 +13,9 @@ class AppBottomNavbar extends StatefulWidget {
 class _AppBottomNavbarState extends State<AppBottomNavbar> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _screens = <Widget>[
+  static final List<Widget> _screens = <Widget>[
     HomeScreen(),
-    SearchScreen(),
+    ExploreScreen(),
     FavoriteScreen(),
   ];
 
@@ -37,7 +37,10 @@ class _AppBottomNavbarState extends State<AppBottomNavbar> {
         showUnselectedLabels: true,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search_rounded),
+            label: 'Explore',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'Favorites',

@@ -37,8 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const BoldText(text: 'Feeling Hungry?', size: 20),
-                const BoldText(text: "What are we cooking today?", size: 20),
+                const BoldText(text: 'Feeling Hungry?', size: 24),
+                const BoldText(text: "What are we cooking today?", size: 24),
                 //DIVIDER
                 SizedBox(height: 16),
                 //Search Bar
