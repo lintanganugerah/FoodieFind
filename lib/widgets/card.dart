@@ -10,7 +10,7 @@ class CardContainer extends StatelessWidget {
   final Decoration? containerDecoration;
   final Decoration? containerForegroundDecoration;
   final BoxConstraints? containerConstraints;
-  final EdgeInsetsGeometry? containerMargin;
+  final EdgeInsets? containerMargin;
   final Matrix4? containerTransform;
   final AlignmentGeometry? containerTransformAlignment;
   final Clip clipBehavior;
@@ -25,7 +25,7 @@ class CardContainer extends StatelessWidget {
     this.width = 150,
     this.height = 200,
     this.color = Colors.white,
-    this.containerPadd = const EdgeInsetsGeometry.all(16),
+    this.containerPadd = const EdgeInsets.all(16),
     this.containerAlignment,
     this.containerDecoration,
     this.containerForegroundDecoration,
@@ -38,18 +38,19 @@ class CardContainer extends StatelessWidget {
     this.boxShadow,
     required this.child,
   }) : assert(
-  !(isShadow == true && containerDecoration != null),
-  'Kamu tidak bisa memberikan params isShadow=true dan containerDecoration bersamaan. Ini akan menyebabkan konflik. Hapus salah satu nya.',
-  );
+         !(isShadow == true && containerDecoration != null),
+         'Kamu tidak bisa memberikan params isShadow=true dan containerDecoration bersamaan. Ini akan menyebabkan konflik. Hapus salah satu nya.',
+       );
 
   @override
   Widget build(BuildContext context) {
-    final effectiveDecoration =
-        containerDecoration ??
-            BoxDecoration(
-              color: color,
-              boxShadow: isShadow
-                  ? (boxShadow ??
+    dynamic effectiveDecoration;
+
+    if (isShadow) {
+      effectiveDecoration = BoxDecoration(
+        color: color,
+        boxShadow: isShadow
+            ? (boxShadow ??
                   [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.1),
@@ -57,14 +58,17 @@ class CardContainer extends StatelessWidget {
                       offset: const Offset(0, 4),
                     ),
                   ])
-                  : null,
-              borderRadius: BorderRadius.circular(12),
-            );
+            : null,
+        borderRadius: BorderRadius.circular(12),
+      );
+    } else if (isShadow == false && containerDecoration != null) {
+      effectiveDecoration = containerDecoration;
+    }
 
     return Container(
       width: width,
       height: height,
-      color: isShadow ? null : color,
+      color: effectiveDecoration == null ? color : null,
       padding: containerPadd,
       decoration: effectiveDecoration,
       alignment: containerAlignment,

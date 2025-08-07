@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foodiefind/pages/home_screen.dart';
-import 'package:flutter_foodiefind/widgets/app_bottom_navbar.dart';
+import 'package:flutter_foodiefind/app_bottom_navbar.dart';
 
 void main() {
   runApp(const MyApp());
