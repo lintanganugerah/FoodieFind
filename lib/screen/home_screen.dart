@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foodiefind/screen/recipe_detail_screen.dart';
+import 'package:flutter_foodiefind/screen/search_result_screen.dart';
 import 'package:flutter_foodiefind/widgets/bold_text.dart';
 import 'package:flutter_foodiefind/widgets/card.dart';
 import 'package:flutter_foodiefind/widgets/recipe_card.dart';
@@ -27,12 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final String searchQuery = _searchController.text.trim();
     if (searchQuery.isNotEmpty) {
       print('Mencari untuk: "$searchQuery"');
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => SearchResultsScreen(query: searchQuery),
-      //   ),
-      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              SearchResultScreen(query: searchQuery, isSearchBar: true),
+        ),
+      );
     }
   }
 
@@ -87,7 +89,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       prefixIcon: const Icon(Icons.search, color: Colors.grey),
                       filled: true,
                       fillColor: Colors.white,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24.0),
                         borderSide: BorderSide.none,
