@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foodiefind/screen/recipe_detail_screen.dart';
 import 'package:flutter_foodiefind/widgets/bold_text.dart';
 import 'package:flutter_foodiefind/widgets/card.dart';
 import 'package:flutter_foodiefind/widgets/recipe_card.dart';
@@ -82,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             containerDecoration: BoxDecoration(
                               image: DecorationImage(
                                 image: NetworkImage(
-                                  'https://placehold.co/400x600/png',
+                                  'https://placehold.co/200x1080/png',
                                 ),
                                 fit: BoxFit.cover,
                               ),
@@ -136,16 +137,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   spacing: 16,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const BoldText(
-                          text: "Rekomendasi",
-                          color: Colors.green,
-                          size: 16,
-                        ),
-                        const Text("See All", style: TextStyle(fontSize: 12)),
-                      ],
+                    const BoldText(
+                      text: "Rekomendasi",
+                      color: Colors.green,
+                      size: 16,
                     ),
                     GridView.builder(
                       itemCount: lengthListItems,
@@ -160,10 +155,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                       itemBuilder: (context, index) {
                         final item = _listItems[index];
-                        return RecipeCard(
-                          title: "Title $item",
-                          subtitle: "Subtitle",
-                          imageNetworkUrl: "https://placehold.co/1920x1080/png",
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RecipeDetailScreen(),
+                              ),
+                            );
+                          },
+                          child: RecipeCard(
+                            title: "Title $item",
+                            subtitle: "Subtitle",
+                            imageNetworkUrl:
+                                "https://placehold.co/1920x1080/png",
+                          ),
                         );
                       },
                     ),
