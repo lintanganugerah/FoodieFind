@@ -4,12 +4,12 @@ import 'package:flutter_foodiefind/widgets/recipe_card.dart';
 
 class SearchResultScreen extends StatefulWidget {
   final String query;
-  final bool isSearchBar;
+  final bool isFromSearchBar;
 
   const SearchResultScreen({
     super.key,
     required this.query,
-    this.isSearchBar = false,
+    this.isFromSearchBar = false,
   });
 
   @override
@@ -37,7 +37,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                widget.isSearchBar
+                widget.isFromSearchBar
                     ? Container(
                         margin: EdgeInsets.only(bottom: 16),
                         child: Column(

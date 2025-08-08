@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foodiefind/screen/search_result_screen.dart';
 import 'package:flutter_foodiefind/widgets/bold_text.dart';
-import 'package:flutter_foodiefind/widgets/card.dart';
+import 'package:flutter_foodiefind/widgets/box_card.dart';
 
 class ExploreScreen extends StatelessWidget {
   ExploreScreen({super.key});
@@ -22,41 +23,33 @@ class ExploreScreen extends StatelessWidget {
             ),
 
             //DIVIDER
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: SizedBox(
-                height: 150,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _listItems.length,
-                  // Agar listview tidak terpotong
-                  clipBehavior: Clip.none,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      child: SizedBox(
-                        width: 120,
-                        height: 150,
-                        child: CardContainer(
-                          isShadow: true,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.fastfood_outlined, size: 40),
-                              const SizedBox(height: 8),
-                              Text(
-                                "Category ${index + 1}",
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+            SizedBox(
+              height: 120,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: _listItems.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: BoxCard(
+                      imageUrl: "https://placehold.co/200x1080/png",
+                      titleOverlay: "Category",
+                      height: 120,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SearchResultScreen(query: "Category"),
                           ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
             ),
 
@@ -69,39 +62,33 @@ class ExploreScreen extends StatelessWidget {
               size: 16,
               color: Colors.green,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: SizedBox(
-                height: 150,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _listItems.length,
-                  // Agar listview tidak terpotong
-                  clipBehavior: Clip.none,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      child: SizedBox(
-                        width: 120,
-                        height: 150,
-                        child: CardContainer(
-                          isShadow: true,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.kitchen, size: 40),
-                              const SizedBox(height: 8),
-                              Text(
-                                "Main Ingredients ${index + 1}",
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+            //DIVIDER
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 120,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: _listItems.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: BoxCard(
+                      imageUrl: "https://placehold.co/200x1080/png",
+                      titleOverlay: "Main Ingredients ${index + 1}",
+                      height: 120,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SearchResultScreen(query: "Main Ingredients"),
                           ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
             ),
 
@@ -129,20 +116,18 @@ class ExploreScreen extends StatelessWidget {
               itemCount: _listItems.length,
               clipBehavior: Clip.none,
               itemBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                  width: 120,
-                  height: 150,
-                  child: CardContainer(
-                    isShadow: true,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.pin_drop, size: 40),
-                        const SizedBox(height: 8),
-                        Text("Area ${index + 1}", textAlign: TextAlign.center),
-                      ],
-                    ),
-                  ),
+                return BoxCard(
+                  imageUrl: "https://placehold.co/200x1080/png",
+                  titleOverlay: "Area ${index + 1}",
+                  height: 120,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchResultScreen(query: "Area"),
+                      ),
+                    );
+                  },
                 );
               },
             ),

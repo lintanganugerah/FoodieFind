@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foodiefind/widgets/bold_text.dart';
+import 'package:flutter_foodiefind/widgets/box_card.dart';
 import 'package:flutter_foodiefind/widgets/card.dart';
 
 class RecipeDetailScreen extends StatefulWidget {
@@ -112,49 +113,23 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                   SizedBox(
                     height: 150,
                     child: ListView.builder(
-                      shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
                       itemCount: _listItems.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: CardContainer(
-                                  width: 100,
-                                  containerPadd: EdgeInsets.zero,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: Image.network(
-                                      'https://placehold.co/1920x1080/png',
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              BoldText(
-                                text: "Title",
-                                textMaxline: 1,
-                                color: Colors.black54,
-                                textOverflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                "Measurement",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ],
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: BoxCard(
+                            imageUrl: "https://placehold.co/200x1080/png",
+                            titleBelow: "Title",
+                            subtitleBelow: "Subtitle",
+                            height: 100,
                           ),
                         );
                       },
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   const BoldText(
                     text: 'Instruction',
                     size: 20,

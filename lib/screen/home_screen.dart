@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              SearchResultScreen(query: searchQuery, isSearchBar: true),
+              SearchResultScreen(query: searchQuery, isFromSearchBar: true),
         ),
       );
     }
