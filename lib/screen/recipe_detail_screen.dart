@@ -110,7 +110,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                   ),
                   const SizedBox(height: 8),
                   SizedBox(
-                    height: 100,
+                    height: 150,
                     child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
@@ -118,18 +118,37 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.only(right: 8.0),
-                          child: CardContainer(
-                            width: 100,
-                            height: 100,
-                            containerPadd: EdgeInsets.zero,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(24),
-                              child: Image.network(
-                                'https://placehold.co/1920x1080/png',
-                                width: double.infinity,
-                                fit: BoxFit.cover,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: CardContainer(
+                                  width: 100,
+                                  containerPadd: EdgeInsets.zero,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: Image.network(
+                                      'https://placehold.co/1920x1080/png',
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                              SizedBox(height: 8),
+                              BoldText(
+                                text: "Title",
+                                textMaxline: 1,
+                                color: Colors.black54,
+                                textOverflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                "Measurement",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ],
                           ),
                         );
                       },
