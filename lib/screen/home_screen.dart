@@ -14,6 +14,28 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final List<int> _listItems = List.generate(6, (int index) => 1 + index);
 
+  final _formKey = GlobalKey<FormState>();
+  final _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _submitSearch() {
+    final String searchQuery = _searchController.text.trim();
+    if (searchQuery.isNotEmpty) {
+      print('Mencari untuk: "$searchQuery"');
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => SearchResultsScreen(query: searchQuery),
+      //   ),
+      // );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final lengthListItems = _listItems.length;
@@ -55,12 +77,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 //DIVIDER
                 SizedBox(height: 16),
                 //Search Bar
-                Container(
-                  width: double.infinity,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadiusGeometry.circular(24),
-                    color: Colors.white,
+                Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: _searchController,
+                    onFieldSubmitted: (value) => _submitSearch(),
+                    decoration: InputDecoration(
+                      hintText: 'Cari resep...',
+                      prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24.0),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
                   ),
                 ),
                 //DIVIDER
@@ -151,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
-                            childAspectRatio: 0.65,
+                            childAspectRatio: 0.70,
                           ),
                       itemBuilder: (context, index) {
                         final item = _listItems[index];

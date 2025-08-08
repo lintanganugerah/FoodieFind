@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foodiefind/widgets/bold_text.dart';
 import 'package:flutter_foodiefind/widgets/recipe_card.dart';
-import 'package:shimmer/shimmer.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -32,7 +31,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               crossAxisCount: 2,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
-              childAspectRatio: 0.65,
+              childAspectRatio: 0.70,
             ),
             itemBuilder: (context, index) {
               final item = _listItems[index];
