@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foodiefind/screen/recipe_detail_screen.dart';
-import 'package:flutter_foodiefind/screen/search_result_screen.dart';
+import 'package:flutter_foodiefind/views/recipe_detail_screen.dart';
+import 'package:flutter_foodiefind/views/search_result_screen.dart';
 import 'package:flutter_foodiefind/widgets/bold_text.dart';
 import 'package:flutter_foodiefind/widgets/card.dart';
 import 'package:flutter_foodiefind/widgets/recipe_card.dart';

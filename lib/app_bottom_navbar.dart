@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foodiefind/screen/favorite_screen.dart';
-import 'package:flutter_foodiefind/screen/home_screen.dart';
-import 'package:flutter_foodiefind/screen/explore_screen.dart';
+import 'package:flutter_foodiefind/views/favorite_screen.dart';
+import 'package:flutter_foodiefind/views/home_screen.dart';
+import 'package:flutter_foodiefind/views/explore_screen.dart';
 
 class AppBottomNavbar extends StatefulWidget {
   const AppBottomNavbar({super.key});
