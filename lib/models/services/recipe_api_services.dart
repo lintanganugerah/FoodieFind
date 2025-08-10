@@ -31,7 +31,7 @@ class RecipeApiServices {
     }
   }
 
-  //Ambil satu atau lebih resep
+  //Ambil satu atau lebih resep (random)
   Future<RecipeResponse> getRecipe({int count = 1}) async {
     final url = "$_baseUrl/random.php";
     List<Recipe> dataBucket = [];
@@ -48,6 +48,25 @@ class RecipeApiServices {
         dataBucket.addAll(response.meals);
       }
       return RecipeResponse(meals: dataBucket);
+    } catch (e) {
+      throw Exception("Something Went Wrong: $e");
+    }
+  }
+
+  //Ambil resep berdasarkan id
+  Future<RecipeResponse> getRecipeById({String id = ''}) async {
+    final url = "$_baseUrl/lookup.php?i=$id";
+    try {
+      return await fetchDataGet(url: url);
+    } catch (e) {
+      throw Exception("Something Went Wrong: $e");
+    }
+  }
+
+  Future<RecipeResponse> getRecipeByIngredient({String ingredient = ''}) async {
+    final url = "$_baseUrl/filter.php?i=$ingredient";
+    try {
+      return await fetchDataGet(url: url);
     } catch (e) {
       throw Exception("Something Went Wrong: $e");
     }

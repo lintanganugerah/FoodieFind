@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foodiefind/app_bottom_navbar.dart';
+import 'package:flutter_foodiefind/viewmodel/recipe_view_model.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    //Wrap App dengan provider agar bisa akses state
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => RecipeViewModel()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

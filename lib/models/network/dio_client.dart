@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+//Sebenernya bisa sih pake http biasa, sayang dah terlanjur. Refactor nanti
 class DioClient {
   static final Dio _dio = Dio(
     BaseOptions(

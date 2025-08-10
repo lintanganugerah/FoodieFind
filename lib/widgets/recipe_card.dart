@@ -20,7 +20,7 @@ class RecipeCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
+        Flexible(
           child: Stack(
             children: [
               ClipRRect(
@@ -28,8 +28,6 @@ class RecipeCard extends StatelessWidget {
                 child: Image.network(
                   imageNetworkUrl,
                   fit: BoxFit.cover,
-                  width: double.maxFinite,
-                  height: double.infinity,
                   loadingBuilder:
                       (
                         BuildContext context,
@@ -75,8 +73,14 @@ class RecipeCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        BoldText(text: title, size: 16, color: Colors.green),
-        Text(subtitle),
+        BoldText(
+          text: title,
+          size: 16,
+          color: Colors.green,
+          textMaxline: 2,
+          textOverflow: TextOverflow.ellipsis,
+        ),
+        Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
       ],
     );
   }
