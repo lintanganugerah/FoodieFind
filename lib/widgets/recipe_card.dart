@@ -6,16 +6,25 @@ class RecipeCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String imageNetworkUrl;
+  final bool isFavorited;
+  final VoidCallback? onFavoriteTap;
+  final double? imageHeight;
 
   const RecipeCard({
     super.key,
     required this.title,
     required this.subtitle,
     required this.imageNetworkUrl,
+    this.isFavorited = false,
+    this.onFavoriteTap,
+    this.imageHeight,
   });
 
   @override
   Widget build(BuildContext context) {
+    final IconData heartIcon = isFavorited
+        ? Icons.favorite
+        : Icons.favorite_border;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,6 +36,7 @@ class RecipeCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 child: Image.network(
                   imageNetworkUrl,
+                  height: imageHeight,
                   fit: BoxFit.cover,
                   loadingBuilder:
                       (
@@ -34,8 +44,8 @@ class RecipeCard extends StatelessWidget {
                         Widget child,
                         ImageChunkEvent? loadingProgress,
                       ) {
+                        // Jika loading selesai, tampilkan gambar aslinya.
                         if (loadingProgress == null) {
-                          // Jika loading selesai, tampilkan gambar aslinya.
                           return child;
                         }
                         return Shimmer.fromColors(
@@ -50,23 +60,33 @@ class RecipeCard extends StatelessWidget {
                         Object error,
                         StackTrace? stackTrace,
                       ) {
-                        return const Center(
-                          child: Icon(
-                            Icons.broken_image,
-                            size: 48,
-                            color: Colors.grey,
-                          ),
+                        return Image.asset(
+                          'assets/images/failed_to_load_image.png',
+                          fit: BoxFit.cover,
+                          height: imageHeight,
                         );
                       },
                 ),
               ),
               Positioned(
-                top: 1,
-                child: IconButton(
-                  icon: Icon(Icons.favorite, color: Colors.green),
-                  onPressed: () {
-                    // TODO: Ubah ini menjadi fungsionalitas hapus/favoritkan recipe
-                  },
+                top: 5,
+                left: 5,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      shape: BoxShape.circle,
+                    ),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(50.0),
+                      onTap: onFavoriteTap,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Icon(heartIcon, size: 20, color: Colors.green),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],

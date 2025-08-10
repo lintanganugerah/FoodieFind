@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foodiefind/viewmodel/recipe_view_model.dart';
 import 'package:flutter_foodiefind/widgets/bold_text.dart';
 import 'package:flutter_foodiefind/widgets/recipe_card.dart';
+import 'package:provider/provider.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -10,8 +12,6 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-  final List<int> _listItems = List.generate(6, (int index) => 1 + index);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,22 +23,61 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         scrolledUnderElevation: 0,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: GridView.builder(
-            itemCount: _listItems.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 0.70,
-            ),
-            itemBuilder: (context, index) {
-              final item = _listItems[index];
-              return RecipeCard(
-                title: "Title $item",
-                subtitle: "Subtitle",
-                imageNetworkUrl: "https://placehold.co/1920x1080/png",
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Consumer<RecipeViewModel>(
+            builder: (context, viewModel, child) {
+              final favoritedRecipes = context
+                  .read<RecipeViewModel>()
+                  .favoritedRecipes;
+              if (viewModel.favoritedRecipes.isNotEmpty) {
+                final favoritedList = favoritedRecipes.values.toList();
+                return GridView.builder(
+                  itemCount: favoritedRecipes.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.65,
+                  ),
+                  itemBuilder: (context, index) {
+                    final recipe = favoritedList[index];
+
+                    // Selector Hanya akan listening status favorit untuk satu card ini
+                    return Selector<RecipeViewModel, bool>(
+                      // selector: hanya ambil data bool (isFavorited) untuk resep ini
+                      selector: (_, viewModel) =>
+                          viewModel.favoritedRecipes.containsKey(recipe.idMeal),
+
+                      // Rebuild jika selector isFavorited berubah
+                      builder: (context, isFavorited, child) {
+                        return RecipeCard(
+                          title: recipe.strMeal,
+                          subtitle: recipe.strCategory ?? 'Tidak ada kategori',
+                          imageNetworkUrl: recipe.strMealThumb ?? '',
+                          isFavorited: isFavorited,
+                          imageHeight: 150,
+                          onFavoriteTap: () {
+                            // Akan trigger toggleFavoriteRecipe
+                            context
+                                .read<RecipeViewModel>()
+                                .toggleFavoriteRecipe(recipe.idMeal, recipe);
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              }
+
+              return Center(
+                child: BoldText(
+                  text:
+                      "Tidak ada resep favorit ditemukan. Klik Icon hati pada resep untuk anda favoritkan, resep tersebut akan tersimpan disini",
+                  textAlignment: TextAlign.center,
+                ),
               );
             },
           ),

@@ -12,7 +12,7 @@ class RecipeViewModel extends ChangeNotifier {
   List<Recipe> _recommendationRecipes = [];
   List<Recipe> _randomRecipes = [];
   Recipe? _selectedRecipe;
-  List<Recipe> _favoritedRecipes = [];
+  Map<String, Recipe> _favoritedRecipes = {};
 
   // Ini menampung hasil data yang dcari oleh user
   List<Recipe> _searchResultRecipes = [];
@@ -30,7 +30,7 @@ class RecipeViewModel extends ChangeNotifier {
 
   Recipe? get selectedRecipe => _selectedRecipe;
 
-  List<Recipe> get favoritedRecipes => _favoritedRecipes;
+  Map<String, Recipe> get favoritedRecipes => _favoritedRecipes;
 
   //Loading State
   bool _isSearching = false;
@@ -101,9 +101,7 @@ class RecipeViewModel extends ChangeNotifier {
 
     if (_randomRecipes.isNotEmpty) {
       print('Random recipe sudah ada, tidak perlu fetch ulang');
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        notifyListeners();
-      });
+      notifyListeners();
       return;
     }
     _isFetchingRandom = true;
@@ -122,9 +120,7 @@ class RecipeViewModel extends ChangeNotifier {
       print("Fetch Random Recipe Error: ${e.toString()}");
     } finally {
       _isFetchingRandom = false;
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        notifyListeners();
-      });
+      notifyListeners();
     }
   }
 
@@ -133,9 +129,7 @@ class RecipeViewModel extends ChangeNotifier {
 
     //Fetch hanya sekali, jika sudah ada return. Supaya tidak fetch ulang
     if (_recommendationRecipes.isNotEmpty) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        notifyListeners();
-      });
+      notifyListeners();
       return;
     }
     _isFetchingRecommendation = true;
@@ -153,15 +147,28 @@ class RecipeViewModel extends ChangeNotifier {
       print("Fetch Recommendation Recipe Error: ${e.toString()}");
     } finally {
       _isFetchingRecommendation = false;
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        notifyListeners();
-      });
+      notifyListeners();
     }
+  }
+
+  void toggleFavoriteRecipe(String recipeId, Recipe recipe) {
+    if (_favoritedRecipes.containsKey(recipeId)) {
+      _favoritedRecipes.remove(recipeId);
+    } else {
+      final recipeEntries = <String, Recipe>{'$recipeId': recipe};
+      _favoritedRecipes.addEntries(recipeEntries.entries);
+    }
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 
   //Memberishkan
   void clearSearchResults() {
     _searchResultRecipes = [];
     _isSearchingErr = false;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 }

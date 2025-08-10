@@ -28,17 +28,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<RecipeViewModel>(context, listen: false).fetchRandomRecipes();
-    Provider.of<RecipeViewModel>(
-      context,
-      listen: false,
-    ).fetchRecommendationRecipes();
+    //Tunggu sampai screen built baru jalankan ini
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Panggil ViewModel yang sudah di inisialisasikan saat render
+      final viewModel = Provider.of<RecipeViewModel>(context, listen: false);
+      viewModel.fetchRandomRecipes();
+      viewModel.fetchRecommendationRecipes();
+    });
   }
 
   void _submitSearch() {
     final String searchQuery = _searchController.text.trim();
     if (searchQuery.isNotEmpty) {
-      print('Mencari untuk: "$searchQuery"');
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -122,18 +123,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (context, viewModel, child) {
                     // Loading
                     if (viewModel.isFetchingRandom) {
-                      return Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
-                        child: CardContainer(
-                          width: double.infinity,
-                          containerPadd: EdgeInsets.zero,
-                          height: 400,
-                          containerDecoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
+                      return CardContainer(
+                        height: 300,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
                           ),
-                          child: Container(),
                         ),
                       );
                     }
@@ -183,23 +183,29 @@ class _HomeScreenState extends State<HomeScreen> {
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: 300,
-                              loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) {
-                                  // Jika loading selesai tampilkan gambar (child)
-                                  return child;
-                                }
-                                // ketika loading tampilkan shimmer
-                                return Shimmer.fromColors(
-                                  baseColor: Colors.grey[300]!,
-                                  highlightColor: Colors.grey[100]!,
-                                  child: Container(color: Colors.white),
-                                );
-                              },
+
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    }
+                                    // ketika loading tampilkan shimmer
+                                    return Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.grey[100]!,
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 300,
+                                        color: Colors.white,
+                                      ),
+                                    );
+                                  },
 
                               errorBuilder: (context, error, stackTrace) {
                                 return Image.asset(
-                                  'images/failed_to_load_image.png',
+                                  'assets/images/failed_to_load_image.png',
                                   fit: BoxFit.cover,
+                                  height: 300,
                                 );
                               },
                             ),
@@ -266,9 +272,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: 8),
                 Consumer<RecipeViewModel>(
                   builder: (context, viewModel, child) {
-                    //Loading
+                    // Loading dengan shimmer
                     if (viewModel.isFetchingRecommendation) {
-                      // Tampilkan shimmer berbentuk GridView
                       return GridView.builder(
                         itemCount: 6,
                         shrinkWrap: true,
@@ -278,21 +283,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisCount: 2,
                               crossAxisSpacing: 16,
                               mainAxisSpacing: 16,
-                              childAspectRatio: 0.70,
+                              childAspectRatio: 0.65,
                             ),
-                        itemBuilder: (context, index) {
-                          return Shimmer.fromColors(
-                            baseColor: Colors.grey[300]!,
-                            highlightColor: Colors.grey[100]!,
-                            child: Container(
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
+                        itemBuilder: (context, index) => Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                          );
-                        },
+                          ),
+                        ),
                       );
                     }
 
@@ -305,12 +307,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }
 
-                    //Success
+                    // Sukse
                     if (viewModel.recommendationRecipes.isNotEmpty) {
-                      final recommendationRecipe =
+                      final recommendationRecipes =
                           viewModel.recommendationRecipes;
                       return GridView.builder(
-                        itemCount: recommendationRecipe.length,
+                        itemCount: recommendationRecipes.length,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate:
@@ -321,32 +323,46 @@ class _HomeScreenState extends State<HomeScreen> {
                               childAspectRatio: 0.65,
                             ),
                         itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RecipeDetailScreen(),
-                                ),
+                          final recipe = recommendationRecipes[index];
+
+                          // Selector Hanya akan listening status favorit untuk satu card ini
+                          return Selector<RecipeViewModel, bool>(
+                            // selector: hanya ambil data bool (isFavorited) untuk resep ini
+                            selector: (_, viewModel) => viewModel
+                                .favoritedRecipes
+                                .containsKey(recipe.idMeal),
+
+                            // Rebuild jika selector isFavorited berubah
+                            builder: (context, isFavorited, child) {
+                              return RecipeCard(
+                                title: recipe.strMeal,
+                                subtitle:
+                                    recipe.strCategory ?? 'Tidak ada kategori',
+                                imageNetworkUrl: recipe.strMealThumb ?? '',
+                                isFavorited: isFavorited,
+                                imageHeight: 150,
+                                onFavoriteTap: () {
+                                  // Akan trigger toggleFavoriteRecipe
+                                  context
+                                      .read<RecipeViewModel>()
+                                      .toggleFavoriteRecipe(
+                                        recipe.idMeal,
+                                        recipe,
+                                      );
+                                },
                               );
                             },
-                            child: RecipeCard(
-                              title: recommendationRecipe[index].strMeal,
-                              subtitle:
-                                  recommendationRecipe[index].strCategory ??
-                                  'Tidak ada kategori',
-                              imageNetworkUrl:
-                                  recommendationRecipe[index].strMealThumb ??
-                                  '',
-                            ),
                           );
                         },
                       );
                     }
 
-                    return CardContainer(
-                      child: const Center(
-                        child: Text("Tidak ada resep ditemukan."),
+                    // Fallback jika data kosong
+                    return Container(
+                      height: 100,
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "Tidak ada resep rekomendasi ditemukan.",
                       ),
                     );
                   },

@@ -42,11 +42,18 @@ class RecipeApiServices {
     }
 
     try {
-      //Sejauh ini tidak ada limiter jadi ini aman
-      for (int i = 0; i < count; i++) {
-        final response = await fetchDataGet(url: url);
+      // Generate list banyaknya API Call yang harus dilakukan berdasarkan count
+      final apiCalls = List.generate(count, (_) => fetchDataGet(url: url));
+
+      // Paralel ApiCall
+      final responses = await Future.wait(apiCalls);
+
+      // Gabungkan semua hasil menjadi satu list
+      final List<Recipe> dataBucket = [];
+      for (var response in responses) {
         dataBucket.addAll(response.meals);
       }
+
       return RecipeResponse(meals: dataBucket);
     } catch (e) {
       throw Exception("Something Went Wrong: $e");
