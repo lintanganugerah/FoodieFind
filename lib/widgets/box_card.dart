@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BoxCard extends StatelessWidget {
-  final String imageUrl;
+  final String? imageUrl;
+  final String? imageAssets;
   final String? titleOverlay;
   final String? titleBelow;
   final String? subtitleBelow;
@@ -12,14 +13,19 @@ class BoxCard extends StatelessWidget {
 
   const BoxCard({
     super.key,
-    required this.imageUrl,
+    this.imageAssets,
+    this.imageUrl,
     this.titleOverlay,
     this.titleBelow,
     this.subtitleBelow,
     this.width,
     this.height,
     this.onTap,
-  });
+  }) : assert(
+         (imageUrl != null && imageAssets == null) ||
+             (imageUrl == null && imageAssets != null),
+         'Harus ada salah satu antara imageUrl atau imageAssets. Tidak bisa memberikan kedua nya.',
+       );
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +33,9 @@ class BoxCard extends StatelessWidget {
     // Default rasio 1:1
     final double finalWidth = width ?? height ?? 120.0;
     final double finalHeight = height ?? width ?? 120.0;
+    final image = imageAssets != null
+        ? Image.asset(imageAssets!, fit: BoxFit.cover, width: 150)
+        : Image.network(imageUrl!, fit: BoxFit.cover, width: 150);
 
     return GestureDetector(
       onTap: onTap,
@@ -45,7 +54,7 @@ class BoxCard extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: Image.network(imageUrl, fit: BoxFit.cover),
+                    child: image,
                   ),
                   if (titleOverlay != null)
                     Container(
