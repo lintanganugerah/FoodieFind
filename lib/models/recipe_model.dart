@@ -68,8 +68,12 @@ class RecipeResponse {
 
   RecipeResponse({required this.meals});
 
-  factory RecipeResponse.fromJson(Map<String, dynamic> json) {
+  factory RecipeResponse.fromJson(Map<String, dynamic> json, [int? maxData]) {
     var mealsList = json['meals'] as List?;
+    if (mealsList != null && maxData != null && mealsList.length > maxData) {
+      mealsList = mealsList.sublist(0, maxData);
+    }
+
     List<Recipe> recipes = mealsList != null
         ? mealsList
               .map((i) => Recipe.fromJson(i as Map<String, dynamic>))

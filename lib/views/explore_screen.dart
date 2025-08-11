@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foodiefind/constant/area_recipe_const.dart';
 import 'package:flutter_foodiefind/constant/category_recipe_const.dart';
 import 'package:flutter_foodiefind/constant/main_ingredients_recipe_const.dart';
+import 'package:flutter_foodiefind/type/search_source_enum.dart';
 import 'package:flutter_foodiefind/views/search_result_screen.dart';
 import 'package:flutter_foodiefind/widgets/bold_text.dart';
 import 'package:flutter_foodiefind/widgets/box_card.dart';
@@ -20,8 +21,6 @@ class ExploreScreen extends StatelessWidget {
   static const List<Map<String, String>> _areaData =
       AreaRecipeConst.areaRecipeMap;
   static final int _areaDataLength = _areaData.length;
-
-  static final _listItems = List.generate(5, (int index) => index + 1);
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +57,10 @@ class ExploreScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                SearchResultScreen(query: "Category"),
+                            builder: (context) => SearchResultScreen(
+                              query: categories["strCategory"] ?? "",
+                              searchFrom: SearchSource.category,
+                            ),
                           ),
                         );
                       },
@@ -98,8 +99,10 @@ class ExploreScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                SearchResultScreen(query: "Main Ingredients"),
+                            builder: (context) => SearchResultScreen(
+                              query: mainIngr['strIngredient'] ?? "",
+                              searchFrom: SearchSource.mainIngredient,
+                            ),
                           ),
                         );
                       },
@@ -142,7 +145,10 @@ class ExploreScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SearchResultScreen(query: "Area"),
+                        builder: (context) => SearchResultScreen(
+                          query: area["strArea"] ?? "",
+                          searchFrom: SearchSource.area,
+                        ),
                       ),
                     );
                   },

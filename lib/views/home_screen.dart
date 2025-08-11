@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foodiefind/type/search_source_enum.dart';
 import 'package:flutter_foodiefind/viewmodel/recipe_view_model.dart';
 import 'package:flutter_foodiefind/views/recipe_detail_screen.dart';
 import 'package:flutter_foodiefind/views/search_result_screen.dart';
@@ -43,8 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              SearchResultScreen(query: searchQuery, isFromSearchBar: true),
+          builder: (context) => SearchResultScreen(
+            query: searchQuery,
+            searchFrom: SearchSource.searchBar,
+          ),
         ),
       );
     }

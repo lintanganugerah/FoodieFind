@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_foodiefind/models/recipe_model.dart';
 import 'package:flutter_foodiefind/models/services/recipe_api_services.dart';
+import 'package:flutter_foodiefind/type/search_source_enum.dart';
 
 class RecipeViewModel extends ChangeNotifier {
   final RecipeApiServices _recipeApiServices = RecipeApiServices();
@@ -60,7 +61,10 @@ class RecipeViewModel extends ChangeNotifier {
 
   bool get isRecommendationErr => _isRecommendationErr;
 
-  Future<void> searchRecipe(String query) async {
+  // Cari resep berdasarkan query user
+  // Search source digunakan untuk menentukan apa link API
+  // Query search bisa berasal dari searchBar, sarchByArea, dkk sehingga link berbeda
+  Future<void> searchRecipe(String query, SearchSource source) async {
     _isSearchingErr = false;
     final normalQuery = query.trim().toLowerCase();
 
@@ -75,7 +79,10 @@ class RecipeViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _recipeApiServices.searchRecipe(query: query);
+      final response = await _recipeApiServices.searchRecipe(
+        query: query,
+        source: source,
+      );
       _searchResultRecipes = response.meals;
 
       // bersihkan cache jika sudah terlalu banyak
