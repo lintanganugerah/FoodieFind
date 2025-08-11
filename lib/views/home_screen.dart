@@ -335,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisCount: 2,
                               crossAxisSpacing: 16,
                               mainAxisSpacing: 16,
-                              childAspectRatio: 0.65,
+                              childAspectRatio: 0.7,
                             ),
                         itemBuilder: (context, index) {
                           final recipe = recommendationRecipes[index];
@@ -367,7 +367,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       'Tidak ada kategori',
                                   imageNetworkUrl: recipe.strMealThumb ?? '',
                                   isFavorited: isFavorited,
-                                  imageHeight: 150,
                                   onFavoriteTap: () {
                                     // Akan trigger toggleFavoriteRecipe
                                     context

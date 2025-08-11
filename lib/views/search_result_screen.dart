@@ -116,7 +116,6 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                                   subtitle: item.strCategory ?? widget.query,
                                   imageNetworkUrl: item.strMealThumb ?? '',
                                   isFavorited: isFavorited,
-                                  imageHeight: 150,
                                   onFavoriteTap: () {
                                     // Akan trigger toggleFavoriteRecipe
                                     context

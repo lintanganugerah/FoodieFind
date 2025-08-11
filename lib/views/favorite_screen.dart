@@ -70,7 +70,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                 recipe.strCategory ?? 'Tidak ada kategori',
                             imageNetworkUrl: recipe.strMealThumb ?? '',
                             isFavorited: isFavorited,
-                            imageHeight: 150,
                             onFavoriteTap: () {
                               // Akan trigger toggleFavoriteRecipe
                               context

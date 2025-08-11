@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_foodiefind/viewmodel/recipe_view_model.dart';
 import 'package:flutter_foodiefind/widgets/bold_text.dart';
@@ -11,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 class RecipeDetailScreen extends StatefulWidget {
   final String recipeId;
 
-  RecipeDetailScreen({super.key, required this.recipeId});
+  const RecipeDetailScreen({super.key, required this.recipeId});
 
   @override
   State<RecipeDetailScreen> createState() => _RecipeDetailScreenState();

@@ -36,7 +36,8 @@ class RecipeCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 child: Image.network(
                   imageNetworkUrl,
-                  height: imageHeight,
+                  height: double.maxFinite,
+                  width: double.maxFinite,
                   fit: BoxFit.cover,
                   loadingBuilder:
                       (
