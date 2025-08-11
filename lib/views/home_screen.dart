@@ -173,81 +173,93 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (viewModel.randomRecipes.isNotEmpty) {
                       // Ambil resep pertama dari list (randomRecipe cuman ada 1 saja)
                       final recipe = viewModel.randomRecipes.first;
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Stack(
-                          alignment: Alignment.bottomLeft,
-                          children: [
-                            Image.network(
-                              recipe.strMealThumb ?? '',
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: 300,
-
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    }
-                                    // ketika loading tampilkan shimmer
-                                    return Shimmer.fromColors(
-                                      baseColor: Colors.grey[300]!,
-                                      highlightColor: Colors.grey[100]!,
-                                      child: Container(
-                                        width: double.infinity,
-                                        height: 300,
-                                        color: Colors.white,
-                                      ),
-                                    );
-                                  },
-
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  'assets/images/failed_to_load_image.png',
-                                  fit: BoxFit.cover,
-                                  height: 300,
-                                );
-                              },
+                      return GestureDetector(
+                        onTap: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  RecipeDetailScreen(recipeId: recipe.idMeal),
                             ),
-                            Positioned.fill(
-                              child: Container(
-                                alignment: Alignment.bottomLeft,
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Colors.black.withValues(alpha: 0.0),
-                                      Colors.black.withValues(alpha: 0.7),
+                          ),
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Stack(
+                            alignment: Alignment.bottomLeft,
+                            children: [
+                              Image.network(
+                                recipe.strMealThumb ?? '',
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: 300,
+
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      }
+                                      // ketika loading tampilkan shimmer
+                                      return Shimmer.fromColors(
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[100]!,
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 300,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    },
+
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/images/failed_to_load_image.png',
+                                    fit: BoxFit.cover,
+                                    height: 300,
+                                  );
+                                },
+                              ),
+                              Positioned.fill(
+                                child: Container(
+                                  alignment: Alignment.bottomLeft,
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Colors.black.withValues(alpha: 0.0),
+                                        Colors.black.withValues(alpha: 0.7),
+                                      ],
+                                      stops: const [0.2, 0.9],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    ),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      BoldText(
+                                        text: recipe.strMeal,
+                                        size: 18,
+                                        color: Colors.white,
+                                        textMaxline: 2,
+                                        textOverflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        recipe.strCategory ?? "Tanpa Kategori",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                        ),
+                                      ),
                                     ],
-                                    stops: const [0.2, 0.9],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
                                   ),
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    BoldText(
-                                      text: recipe.strMeal,
-                                      size: 18,
-                                      color: Colors.white,
-                                      textMaxline: 2,
-                                      textOverflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      recipe.strCategory ?? "Tanpa Kategori",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     }
@@ -334,22 +346,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             // Rebuild jika selector isFavorited berubah
                             builder: (context, isFavorited, child) {
-                              return RecipeCard(
-                                title: recipe.strMeal,
-                                subtitle:
-                                    recipe.strCategory ?? 'Tidak ada kategori',
-                                imageNetworkUrl: recipe.strMealThumb ?? '',
-                                isFavorited: isFavorited,
-                                imageHeight: 150,
-                                onFavoriteTap: () {
-                                  // Akan trigger toggleFavoriteRecipe
-                                  context
-                                      .read<RecipeViewModel>()
-                                      .toggleFavoriteRecipe(
-                                        recipe.idMeal,
-                                        recipe,
-                                      );
+                              return GestureDetector(
+                                onTap: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RecipeDetailScreen(
+                                        recipeId: recipe.idMeal,
+                                      ),
+                                    ),
+                                  ),
                                 },
+                                child: RecipeCard(
+                                  title: recipe.strMeal,
+                                  subtitle:
+                                      recipe.strCategory ??
+                                      'Tidak ada kategori',
+                                  imageNetworkUrl: recipe.strMealThumb ?? '',
+                                  isFavorited: isFavorited,
+                                  imageHeight: 150,
+                                  onFavoriteTap: () {
+                                    // Akan trigger toggleFavoriteRecipe
+                                    context
+                                        .read<RecipeViewModel>()
+                                        .toggleFavoriteRecipe(
+                                          recipe.idMeal,
+                                          recipe,
+                                        );
+                                  },
+                                ),
                               );
                             },
                           );

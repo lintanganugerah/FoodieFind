@@ -11,7 +11,7 @@ class RecipeViewModel extends ChangeNotifier {
   //State untuk menyimpan hasil recipe random, dkk agar tidak fetch ulang lagi
   List<Recipe> _recommendationRecipes = [];
   List<Recipe> _randomRecipes = [];
-  Recipe? _selectedRecipe;
+  List<Recipe> _detailRecipe = [];
   Map<String, Recipe> _favoritedRecipes = {};
 
   // Ini menampung hasil data yang dcari oleh user
@@ -28,7 +28,7 @@ class RecipeViewModel extends ChangeNotifier {
 
   List<Recipe> get searchResultRecipes => _searchResultRecipes;
 
-  Recipe? get selectedRecipe => _selectedRecipe;
+  List<Recipe> get detailRecipe => _detailRecipe;
 
   Map<String, Recipe> get favoritedRecipes => _favoritedRecipes;
 
@@ -36,25 +36,25 @@ class RecipeViewModel extends ChangeNotifier {
   bool _isSearching = false;
   bool _isFetchingRandom = false;
   bool _isFetchingRecommendation = false;
-  bool _isFetchingDetails = false;
+  bool _isFetchingDetailRecipe = false;
 
   bool get isSearching => _isSearching;
 
   bool get isFetchingRandom => _isFetchingRandom;
 
-  bool get isFetchingDetails => _isFetchingDetails;
+  bool get isFetchingDetailRecipe => _isFetchingDetailRecipe;
 
   bool get isFetchingRecommendation => _isFetchingRecommendation;
 
   //Error state
   bool _isSearchingErr = false;
-  bool _isDetailsErr = false;
+  bool _isDetailRecipeErr = false;
   bool _isRandomRecipeErr = false;
   bool _isRecommendationErr = false;
 
   bool get isSerchingErr => _isSearchingErr;
 
-  bool get isDetailsErr => _isDetailsErr;
+  bool get isDetailsRecipeErr => _isDetailRecipeErr;
 
   bool get isRandomRecipeErr => _isRandomRecipeErr;
 
@@ -151,6 +151,33 @@ class RecipeViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> fetchDetailRecipes(String recipeId) async {
+    _isDetailRecipeErr = false;
+
+    //Fetch hanya sekali, jika sudah ada return. Supaya tidak fetch ulang
+    if (_detailRecipe.isNotEmpty) {
+      notifyListeners();
+      return;
+    }
+    _isFetchingDetailRecipe = true;
+    _detailRecipe = [];
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+
+    try {
+      final response = await _recipeApiServices.getRecipeById(id: recipeId);
+      _detailRecipe = response.meals;
+    } catch (e) {
+      _isDetailRecipeErr = true;
+      //Sementara print aja lah, nnti klo ada log masukin ke log
+      print("Fetch Detail Recipe Error: ${e.toString()}");
+    } finally {
+      _isFetchingDetailRecipe = false;
+      notifyListeners();
+    }
+  }
+
   void toggleFavoriteRecipe(String recipeId, Recipe recipe) {
     if (_favoritedRecipes.containsKey(recipeId)) {
       _favoritedRecipes.remove(recipeId);
@@ -167,6 +194,15 @@ class RecipeViewModel extends ChangeNotifier {
   void clearSearchResults() {
     _searchResultRecipes = [];
     _isSearchingErr = false;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+  }
+
+  //Memberishkan
+  void clearDetailRecipeData() {
+    _detailRecipe = [];
+    _isDetailRecipeErr = false;
     SchedulerBinding.instance.addPostFrameCallback((_) {
       notifyListeners();
     });

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foodiefind/viewmodel/recipe_view_model.dart';
+import 'package:flutter_foodiefind/views/recipe_detail_screen.dart';
 import 'package:flutter_foodiefind/widgets/bold_text.dart';
 import 'package:flutter_foodiefind/widgets/recipe_card.dart';
 import 'package:provider/provider.dart';
@@ -53,18 +54,30 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
                       // Rebuild jika selector isFavorited berubah
                       builder: (context, isFavorited, child) {
-                        return RecipeCard(
-                          title: recipe.strMeal,
-                          subtitle: recipe.strCategory ?? 'Tidak ada kategori',
-                          imageNetworkUrl: recipe.strMealThumb ?? '',
-                          isFavorited: isFavorited,
-                          imageHeight: 150,
-                          onFavoriteTap: () {
-                            // Akan trigger toggleFavoriteRecipe
-                            context
-                                .read<RecipeViewModel>()
-                                .toggleFavoriteRecipe(recipe.idMeal, recipe);
+                        return GestureDetector(
+                          onTap: () => {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    RecipeDetailScreen(recipeId: recipe.idMeal),
+                              ),
+                            ),
                           },
+                          child: RecipeCard(
+                            title: recipe.strMeal,
+                            subtitle:
+                                recipe.strCategory ?? 'Tidak ada kategori',
+                            imageNetworkUrl: recipe.strMealThumb ?? '',
+                            isFavorited: isFavorited,
+                            imageHeight: 150,
+                            onFavoriteTap: () {
+                              // Akan trigger toggleFavoriteRecipe
+                              context
+                                  .read<RecipeViewModel>()
+                                  .toggleFavoriteRecipe(recipe.idMeal, recipe);
+                            },
+                          ),
                         );
                       },
                     );

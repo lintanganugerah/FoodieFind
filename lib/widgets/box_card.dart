@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BoxCard extends StatelessWidget {
   final String? imageUrl;
@@ -35,7 +36,35 @@ class BoxCard extends StatelessWidget {
     final double finalHeight = height ?? width ?? 120.0;
     final image = imageAssets != null
         ? Image.asset(imageAssets!, fit: BoxFit.cover, width: 150)
-        : Image.network(imageUrl!, fit: BoxFit.cover, width: 150);
+        : Image.network(
+            imageUrl!,
+            fit: BoxFit.cover,
+            width: 150,
+            loadingBuilder:
+                (
+                  BuildContext context,
+                  Widget child,
+                  ImageChunkEvent? loadingProgress,
+                ) {
+                  // Jika loading selesai, tampilkan gambar aslinya.
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(color: Colors.white),
+                  );
+                },
+            errorBuilder:
+                (BuildContext context, Object error, StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/images/failed_to_load_image.png',
+                    fit: BoxFit.cover,
+                    height: finalHeight,
+                  );
+                },
+          );
 
     return GestureDetector(
       onTap: onTap,
